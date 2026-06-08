@@ -7,6 +7,11 @@ import {
   AlertTriangle,
   Shield,
   DollarSign,
+  CalendarClock,
+  Receipt,
+  HandCoins,
+  BarChart2,
+  Shuffle,
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
 
@@ -14,9 +19,17 @@ const navItems = [
   { to: '/dashboard',  label: 'Escritorio',  icon: LayoutDashboard },
   { to: '/clientes',   label: 'Clientes',    icon: Users },
   { to: '/polizas',    label: 'Pólizas',     icon: FileText },
+  { to: '/renovaciones', label: 'Renovaciones', icon: CalendarClock },
   { to: '/cobranzas',  label: 'Cobranzas',   icon: CreditCard },
+  { to: '/estado-cuenta', label: 'Edo. Cuenta', icon: Receipt },
   { to: '/comisiones', label: 'Comisiones',  icon: DollarSign },
+  { to: '/liquidaciones', label: 'Liquidaciones', icon: HandCoins },
   { to: '/siniestros', label: 'Siniestros',  icon: AlertTriangle },
+];
+
+const statsItems = [
+  { to: '/produccion', label: 'Producción', icon: BarChart2 },
+  { to: '/venta-cruzada', label: 'Venta Cruzada', icon: Shuffle },
 ];
 
 export default function Sidebar() {
@@ -37,6 +50,34 @@ export default function Sidebar() {
       <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
         <p className="px-3 mb-2 text-[10px] font-semibold text-slate-500 uppercase tracking-widest">Menú Principal</p>
         {navItems.map(({ to, label, icon: Icon }) => (
+          <NavLink
+            key={to}
+            to={to}
+            className={({ isActive }) =>
+              cn(
+                'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 group',
+                isActive
+                  ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-900/30'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-800'
+              )
+            }
+          >
+            {({ isActive }) => (
+              <>
+                <Icon
+                  size={18}
+                  className={cn('shrink-0 transition-colors', isActive ? 'text-white' : 'text-slate-500 group-hover:text-slate-300')}
+                />
+                {label}
+              </>
+            )}
+          </NavLink>
+        ))}
+
+        <div className="mt-6 mb-2">
+           <p className="px-3 text-[10px] font-semibold text-slate-500 uppercase tracking-widest">Estadísticas Comerciales</p>
+        </div>
+        {statsItems.map(({ to, label, icon: Icon }) => (
           <NavLink
             key={to}
             to={to}

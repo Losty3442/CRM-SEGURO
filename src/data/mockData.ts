@@ -1,12 +1,17 @@
 import * as storage from '../services/storage';
-import type { Cliente, Poliza, Cuota, Siniestro, Comision } from '../types';
+import type { Cliente, Poliza, Cuota, Siniestro, Comision, SubAgente } from '../types';
 
 // Reference date: 2026-06-06
 
+const SUBAGENTES: SubAgente[] = [
+  { id: 'sub-001', nombre: 'Roberto Sánchez', comisionPorcentaje: 50, email: 'rsanchez@seguros.com', telefono: '987123654', estado: 'Activo' },
+  { id: 'sub-002', nombre: 'Carla Díaz', comisionPorcentaje: 40, email: 'cdiaz@seguros.com', telefono: '912345678', estado: 'Activo' },
+];
+
 const CLIENTES: Cliente[] = [
-  { id: 'cli-001', tipoPersona: 'Natural', tipoDocumento: 'DNI', numeroDocumento: '45671234', nombreRazonSocial: 'Carlos Alberto Mendoza Ríos', telefono: '987654321', whatsapp: '987654321', email: 'c.mendoza@gmail.com', recibirNotificaciones: true, direccion: 'Av. Arequipa 1245, Miraflores, Lima', estado: 'Activo', fechaRegistro: '2024-01-15T08:30:00.000Z' },
-  { id: 'cli-002', tipoPersona: 'Natural', tipoDocumento: 'DNI', numeroDocumento: '39827654', nombreRazonSocial: 'María Elena García Torres', telefono: '998765432', email: 'maria.garcia@hotmail.com', recibirNotificaciones: false, direccion: 'Jr. Tacna 567, Barranco, Lima', estado: 'Activo', fechaRegistro: '2024-02-20T10:00:00.000Z' },
-  { id: 'cli-003', tipoPersona: 'Jurídica', tipoDocumento: 'RUC', numeroDocumento: '20512345678', nombreRazonSocial: 'Transportes Lima Express SAC', telefono: '014567890', email: 'admin@translima.com.pe', recibirNotificaciones: true, direccion: 'Av. Argentina 3456, Callao', estado: 'Activo', fechaRegistro: '2024-01-08T09:00:00.000Z' },
+  { id: 'cli-001', tipoPersona: 'Natural', tipoDocumento: 'DNI', numeroDocumento: '45671234', nombreRazonSocial: 'Carlos Alberto Mendoza Ríos', telefono: '987654321', whatsapp: '987654321', email: 'c.mendoza@gmail.com', recibirNotificaciones: true, direccion: 'Av. Arequipa 1245, Miraflores, Lima', estado: 'Activo', fechaRegistro: '2024-01-15T08:30:00.000Z', subAgenteId: 'sub-001' },
+  { id: 'cli-002', tipoPersona: 'Natural', tipoDocumento: 'DNI', numeroDocumento: '39827654', nombreRazonSocial: 'María Elena García Torres', telefono: '998765432', email: 'maria.garcia@hotmail.com', recibirNotificaciones: false, direccion: 'Jr. Tacna 567, Barranco, Lima', estado: 'Activo', fechaRegistro: '2024-02-20T10:00:00.000Z', subAgenteId: 'sub-001' },
+  { id: 'cli-003', tipoPersona: 'Jurídica', tipoDocumento: 'RUC', numeroDocumento: '20512345678', nombreRazonSocial: 'Transportes Lima Express SAC', telefono: '014567890', email: 'admin@translima.com.pe', recibirNotificaciones: true, direccion: 'Av. Argentina 3456, Callao', estado: 'Activo', fechaRegistro: '2024-01-08T09:00:00.000Z', contactoPrincipal: 'Juan Pérez - 999888777', contactosSecundarios: [{ nombre: 'Ana Gómez', cargo: 'Gerente Finanzas', email: 'agomez@translima.com.pe', telefono: '999111222' }], subAgenteId: 'sub-002' },
   { id: 'cli-004', tipoPersona: 'Natural', tipoDocumento: 'DNI', numeroDocumento: '72345678', nombreRazonSocial: 'Ana Lucía Rodríguez Paz', telefono: '956781234', email: 'ana.rodriguez@outlook.com', recibirNotificaciones: true, direccion: 'Calle Las Begonias 890, San Isidro, Lima', estado: 'Activo', fechaRegistro: '2024-03-05T11:00:00.000Z' },
   { id: 'cli-005', tipoPersona: 'Jurídica', tipoDocumento: 'RUC', numeroDocumento: '20601234567', nombreRazonSocial: 'Constructora Norte Perú SAC', telefono: '017891234', email: 'gerencia@construccnorte.pe', recibirNotificaciones: true, direccion: 'Av. Industrial 2345, Los Olivos, Lima', estado: 'Activo', fechaRegistro: '2024-01-22T08:00:00.000Z' },
   { id: 'cli-006', tipoPersona: 'Natural', tipoDocumento: 'CE', numeroDocumento: 'C12345678', nombreRazonSocial: 'John Michael Smith', telefono: '976543210', email: 'j.smith@email.com', recibirNotificaciones: false, direccion: 'Av. La Paz 1234, Miraflores, Lima', estado: 'Activo', fechaRegistro: '2024-04-10T14:00:00.000Z' },
@@ -18,16 +23,16 @@ const CLIENTES: Cliente[] = [
 
 const POLIZAS: Poliza[] = [
   // ── Vence junio 2026 ──────────────────────────────────────────────────────
-  { id: 'pol-001', idCliente: 'cli-001', companiaSeguro: 'Rimac', ramo: 'SOAT', numeroPoliza: 'RIM-SOAT-2025-001', materiaAsegurada: 'Auto Kia Picanto A1B-234', comisionPorcentaje: 10, vigenciaDesde: '2025-06-10', vigenciaHasta: '2026-06-10', prima: 98.50, moneda: 'PEN', estado: 'Vigente', fechaRegistro: '2025-06-09T10:00:00.000Z' },
+  { id: 'pol-001', idCliente: 'cli-001', companiaSeguro: 'Rimac', ramo: 'SOAT', numeroPoliza: 'RIM-SOAT-2025-001', materiaAsegurada: 'Auto Kia Picanto A1B-234', placaMotor: 'A1B-234', comisionPorcentaje: 10, vigenciaDesde: '2025-06-10', vigenciaHasta: '2026-06-10', prima: 98.50, moneda: 'PEN', estado: 'Vigente', fechaRegistro: '2025-06-09T10:00:00.000Z' },
   { id: 'pol-002', idCliente: 'cli-002', companiaSeguro: 'Pacífico Seguros', ramo: 'Salud', numeroPoliza: 'PAC-SAL-2025-018', comisionPorcentaje: 15, vigenciaDesde: '2025-06-28', vigenciaHasta: '2026-06-28', prima: 2450.00, moneda: 'PEN', estado: 'Vigente', fechaRegistro: '2025-06-27T09:00:00.000Z' },
   { id: 'pol-003', idCliente: 'cli-004', companiaSeguro: 'Rimac', ramo: 'SOAT', numeroPoliza: 'RIM-SOAT-2025-047', vigenciaDesde: '2025-06-20', vigenciaHasta: '2026-06-20', prima: 98.50, moneda: 'PEN', estado: 'Vigente', fechaRegistro: '2025-06-19T11:00:00.000Z' },
   { id: 'pol-004', idCliente: 'cli-010', companiaSeguro: 'La Positiva', ramo: 'SCTR', numeroPoliza: 'LAP-SCTR-2025-023', comisionPorcentaje: 12, vigenciaDesde: '2025-06-30', vigenciaHasta: '2026-06-30', prima: 3200.00, moneda: 'PEN', estado: 'Vigente', fechaRegistro: '2025-06-29T08:00:00.000Z' },
   // ── Vence julio 2026 ──────────────────────────────────────────────────────
-  { id: 'pol-005', idCliente: 'cli-004', companiaSeguro: 'Rimac', ramo: 'Vehicular', numeroPoliza: 'RIM-VEH-2025-089', materiaAsegurada: 'Camioneta Toyota Hilux XYZ-987', comisionPorcentaje: 15, vigenciaDesde: '2025-07-15', vigenciaHasta: '2026-07-15', prima: 1850.00, moneda: 'PEN', estado: 'Vigente', fechaRegistro: '2025-07-14T10:00:00.000Z' },
+  { id: 'pol-005', idCliente: 'cli-004', companiaSeguro: 'Rimac', ramo: 'Vehicular', numeroPoliza: 'RIM-VEH-2025-089', materiaAsegurada: 'Camioneta Toyota Hilux XYZ-987', placaMotor: 'XYZ-987', comisionPorcentaje: 15, vigenciaDesde: '2025-07-15', vigenciaHasta: '2026-07-15', prima: 1850.00, moneda: 'PEN', estado: 'Vigente', fechaRegistro: '2025-07-14T10:00:00.000Z' },
   { id: 'pol-006', idCliente: 'cli-003', companiaSeguro: 'La Positiva', ramo: 'SOAT', numeroPoliza: 'LAP-SOAT-2025-112', vigenciaDesde: '2025-07-31', vigenciaHasta: '2026-07-31', prima: 98.50, moneda: 'PEN', estado: 'Vigente', fechaRegistro: '2025-07-30T09:00:00.000Z' },
   { id: 'pol-007', idCliente: 'cli-007', companiaSeguro: 'La Positiva', ramo: 'SOAT', numeroPoliza: 'LAP-SOAT-2025-134', vigenciaDesde: '2025-07-31', vigenciaHasta: '2026-07-31', prima: 98.50, moneda: 'PEN', estado: 'Vigente', fechaRegistro: '2025-07-30T14:00:00.000Z' },
   // ── Vence agosto 2026 ─────────────────────────────────────────────────────
-  { id: 'pol-008', idCliente: 'cli-001', companiaSeguro: 'Mapfre Perú', ramo: 'Vehicular', numeroPoliza: 'MAP-VEH-2025-056', materiaAsegurada: 'Honda Civic B2C-456', comisionPorcentaje: 15, vigenciaDesde: '2025-08-31', vigenciaHasta: '2026-08-31', prima: 2100.00, moneda: 'PEN', estado: 'Vigente', fechaRegistro: '2025-08-30T10:00:00.000Z' },
+  { id: 'pol-008', idCliente: 'cli-001', companiaSeguro: 'Mapfre Perú', ramo: 'Vehicular', numeroPoliza: 'MAP-VEH-2025-056', materiaAsegurada: 'Honda Civic B2C-456', placaMotor: 'B2C-456', comisionPorcentaje: 15, vigenciaDesde: '2025-08-31', vigenciaHasta: '2026-08-31', prima: 2100.00, moneda: 'PEN', estado: 'Vigente', fechaRegistro: '2025-08-30T10:00:00.000Z' },
   { id: 'pol-009', idCliente: 'cli-007', companiaSeguro: 'Mapfre Perú', ramo: 'Hogar', numeroPoliza: 'MAP-HOG-2025-034', materiaAsegurada: 'Casa de Playa Asia', comisionPorcentaje: 20, vigenciaDesde: '2025-08-15', vigenciaHasta: '2026-08-15', prima: 850.00, moneda: 'PEN', estado: 'Vigente', fechaRegistro: '2025-08-14T11:00:00.000Z' },
   { id: 'pol-010', idCliente: 'cli-008', companiaSeguro: 'Mapfre Perú', ramo: 'Vehicular', numeroPoliza: 'MAP-VEH-2025-078', vigenciaDesde: '2025-08-31', vigenciaHasta: '2026-08-31', prima: 1950.00, moneda: 'PEN', estado: 'Vigente', fechaRegistro: '2025-08-30T09:00:00.000Z' },
   // ── Vence setiembre 2026 ──────────────────────────────────────────────────
@@ -132,5 +137,6 @@ export function initializeMockData(): void {
   storage.saveAll(storage.KEYS.CUOTAS, CUOTAS);
   storage.saveAll(storage.KEYS.SINIESTROS, SINIESTROS);
   storage.saveAll(storage.KEYS.COMISIONES, COMISIONES);
+  storage.saveAll(storage.KEYS.SUBAGENTES, SUBAGENTES);
   storage.markInitialized();
 }

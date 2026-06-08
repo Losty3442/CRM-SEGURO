@@ -32,7 +32,7 @@ export type Moneda = 'PEN' | 'USD';
 export type EstadoCuota = 'Pendiente' | 'Pagado' | 'Vencido';
 export type EstadoSiniestro = 'Pendiente' | 'En Proceso' | 'Resuelto';
 export type EstadoComision = 'Pendiente' | 'Cobrada';
-
+export type EstadoSubAgente = 'Activo' | 'Inactivo';
 // ─── Shared Models ────────────────────────────────────────────────────────────
 
 export interface Adjunto {
@@ -51,6 +51,15 @@ export interface BitacoraEntry {
 
 // ─── Data models ──────────────────────────────────────────────────────────────
 
+export interface SubAgente {
+  id: string;
+  nombre: string;
+  comisionPorcentaje: number; // Porcentaje de comisión que se le paga
+  email: string;
+  telefono: string;
+  estado: EstadoSubAgente;
+}
+
 export interface Cliente {
   id: string;
   tipoPersona: TipoPersona;
@@ -68,8 +77,14 @@ export interface Cliente {
   provincia?: string;
   distrito?: string;
   fechaCumpleanos?: string; // YYYY-MM-DD
-  subAgente?: string;
+  subAgenteId?: string | null;
   contactoPrincipal?: string; // Nombre + Telefono/Email (para Juridicas)
+  contactosSecundarios?: {
+    nombre: string;
+    telefono?: string;
+    email?: string;
+    cargo?: string;
+  }[];
   masInformacion?: string;
   adjuntos?: Adjunto[];
   estado: EstadoCliente;
@@ -82,6 +97,7 @@ export interface Poliza {
   companiaSeguro: CompaniaSeguro;
   ramo: RamoSeguro;
   numeroPoliza: string;
+  placaMotor?: string | null;
   materiaAsegurada?: string; // Ej: "Auto Toyota Yaris ABC-123", "Casa en Miraflores"
   vigenciaDesde: string; // YYYY-MM-DD
   vigenciaHasta: string; // YYYY-MM-DD

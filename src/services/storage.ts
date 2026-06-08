@@ -8,6 +8,7 @@ export const KEYS = {
   CUOTAS: 'crm_cuotas',
   SINIESTROS: 'crm_siniestros',
   COMISIONES: 'crm_comisiones',
+  SUBAGENTES: 'crm_subagentes',
   INITIALIZED: 'crm_initialized',
 } as const;
 

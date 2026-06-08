@@ -46,8 +46,9 @@ const empty: FormData = {
   provincia: '',
   distrito: '',
   fechaCumpleanos: '',
-  subAgente: '',
+  subAgenteId: '',
   contactoPrincipal: '',
+  contactosSecundarios: [],
   masInformacion: '',
   adjuntos: [],
   estado: 'Activo',
@@ -248,10 +249,10 @@ export default function ClienteForm({ initial, onSubmit, onCancel }: Props) {
               onChange={(e) => set('estado', e.target.value as EstadoCliente)}
             />
             <Input
-              label="Sub Agente / Vendedor"
-              value={form.subAgente || ''}
-              onChange={(e) => set('subAgente', e.target.value)}
-              placeholder="Nombre del vendedor asignado"
+              label="Sub Agente / Vendedor (ID)"
+              value={form.subAgenteId || ''}
+              onChange={(e) => set('subAgenteId', e.target.value)}
+              placeholder="ID del vendedor asignado"
             />
           </div>
 
